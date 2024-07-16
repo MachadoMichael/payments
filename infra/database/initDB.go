@@ -6,11 +6,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/MachadoMichael/payment/infra"
+	"github.com/MachadoMichael/payments/infra"
 	"github.com/go-redis/redis/v8"
 )
 
-var CredentialRepo *Repo
+var StoreRepo *Repo
 var client *redis.Client
 
 func Init() {
@@ -29,7 +29,7 @@ func Init() {
 
 	fmt.Printf(pong)
 	client = rdb
-	CredentialRepo = NewRepo(ctx, rdb)
+	StoreRepo = NewRepo(ctx, rdb)
 }
 
 func CloseDb() {

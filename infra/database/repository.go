@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 
-	"github.com/MachadoMichael/payments/schema"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -12,12 +11,17 @@ type Repo struct {
 	db  *redis.Client
 }
 
+type RepoModel struct {
+	Key  string
+	Data string
+}
+
 func NewRepo(ctx context.Context, db *redis.Client) *Repo {
 	return &Repo{ctx: ctx, db: db}
 }
 
-func (r *Repo) Create(credentials schema.Credentials) error {
-	return r.db.Set(r.ctx, credentials.Email, credentials.Password, 0).Err()
+func (r *Repo) Create(model RepoModel) error {
+	return r.db.Set(r.ctx, model.Key, model.Data, 0).Err()
 }
 
 func (r *Repo) Read() (map[string]string, error) {
@@ -64,6 +68,6 @@ func (r *Repo) ReadOne(key string) (string, error) {
 	return result, nil
 }
 
-func (r *Repo) Delete(email string) (int64, error) {
-	return r.db.Del(r.ctx, email).Result()
+func (r *Repo) Delete(storeName string) (int64, error) {
+	return r.db.Del(r.ctx, storeName).Result()
 }
