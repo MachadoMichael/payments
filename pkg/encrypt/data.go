@@ -7,16 +7,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type EncryptData struct {
-	Data interface{}
-}
-
 func HashData(data interface{}) (string, error) {
-
-	newData, err := json.Marshal(EncryptData{
-		Data: data,
-	})
-
+	newData, err := json.Marshal(data)
 	hashedData, err := bcrypt.GenerateFromPassword([]byte(newData), bcrypt.DefaultCost)
 
 	if err != nil {

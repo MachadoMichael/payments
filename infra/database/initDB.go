@@ -12,7 +12,8 @@ import (
 
 var StoreRepo *Repo
 var PaymentRepo *Repo
-var client *redis.Client
+var storeClient *redis.Client
+var paymentClient *redis.Client
 
 func Init() {
 	ctx := context.Background()
@@ -42,11 +43,16 @@ func Init() {
 	fmt.Printf(pong)
 	fmt.Printf(pong2)
 
-	client = rdbStore
+	storeClient = rdbStore
+	paymentClient = rdbPayment
 	StoreRepo = NewRepo(ctx, rdbStore)
 	PaymentRepo = NewRepo(ctx, rdbPayment)
 }
 
-func CloseDb() {
-	client.Close()
+func CloseDbStore() {
+	storeClient.Close()
+}
+
+func CloseDbPayment() {
+	paymentClient.Close()
 }

@@ -38,27 +38,3 @@ func ValidateToken(tokenStr string) (bool, error) {
 		return false, err
 	}
 }
-
-//
-// func ValidateToken(token string) (interface{}, error) {
-//
-// 	var signingKey = []byte(os.Getenv("JWT_SECRET"))
-// 	tok, err := jwt.Parse(token, func(jwtToken *jwt.Token) (interface{}, error) {
-// 		if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
-// 			return nil, fmt.Errorf("unexpected method: %s", jwtToken.Header["alg"])
-// 		}
-//
-// 		return []byte(signingKey), nil
-// 	})
-//
-// 	if err != nil {
-// 		return nil, fmt.Errorf("invalid token %w", err)
-// 	}
-//
-// 	claims, ok := tok.Claims.(jwt.MapClaims)
-// 	if !ok || !tok.Valid {
-// 		return nil, fmt.Errorf("invalid token claim")
-// 	}
-//
-// 	return claims["sub"], nil
-// }
