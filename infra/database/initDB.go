@@ -11,25 +11,40 @@ import (
 )
 
 var StoreRepo *Repo
+var PaymentRepo *Repo
 var client *redis.Client
 
 func Init() {
 	ctx := context.Background()
 
-	rdb := redis.NewClient(&redis.Options{
+	rdbStore := redis.NewClient(&redis.Options{
 		Addr:     os.Getenv("DATABASE_ADDRESS"),
 		Password: os.Getenv("DATABASE_PASSWORD"),
-		DB:       infra.Config.DbName,
+		DB:       infra.Config.DbStores,
 	})
 
-	pong, err := rdb.Ping(ctx).Result()
+	rdbPayment := redis.NewClient(&redis.Options{
+		Addr:     os.Getenv("DATABASE_ADDRESS"),
+		Password: os.Getenv("DATABASE_PASSWORD"),
+		DB:       infra.Config.DbPayments,
+	})
+
+	pong, err := rdbStore.Ping(ctx).Result()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pong2, err := rdbStore.Ping(ctx).Result()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Printf(pong)
-	client = rdb
-	StoreRepo = NewRepo(ctx, rdb)
+	fmt.Printf(pong2)
+
+	client = rdbStore
+	StoreRepo = NewRepo(ctx, rdbStore)
+	PaymentRepo = NewRepo(ctx, rdbPayment)
 }
 
 func CloseDb() {
